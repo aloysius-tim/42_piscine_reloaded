@@ -5,30 +5,39 @@
 #                                                     +:+ +:+         +:+      #
 #    By: tkeynes <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2017/08/09 19:41:30 by tkeynes           #+#    #+#              #
-#    Updated: 2017/08/12 17:16:31 by tkeynes          ###   ########.fr        #
+#    Created: 2017/11/14 17:06:17 by tkeynes           #+#    #+#              #
+#    Updated: 2017/11/14 17:06:25 by tkeynes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
+CC				= gcc
+CFLAGS			= -Wall -Werror -Wextra
+NAME			= libft.a
+LIST_HEADER		= libft.h
+LIST_C_LIBFT	= 	ft_putchar.c \
+					ft_putstr.c \
+					ft_strcmp.c \
+					ft_strlen.c \
+					ft_swap.c
 
-SRC = srcs/ft_putchar.c srcs/ft_putstr.c srcs/ft_strcmp.c srcs/ft_strlen.c \
-		srcs/ft_swap.c
+PATH_LIBFT		= $(addprefix srcs/, $(LIST_C_LIBFT))
+LIST_OBJ_LIBFT	= $(subst .c,.o,$(PATH_LIBFT))
 
-OBJFILES = ft_putchar.o ft_putstr.o ft_strcmp.o ft_strlen.o ft_swap.o
+all: $(NAME)
 
-FLAGS = -Wall -Werror -Wextra
+%.o: %.c
+	$(CC) $(CFLAGS) -I./includes/ -c -o $@ $<
 
-HEADERS = ./includes/
-all:
-	gcc $(FLAGS) -c $(SRC) -I $(HEADERS)
-	ar rc $(NAME) $(OBJFILES)
+$(NAME): $(LIST_OBJ_LIBFT)
+	ar rc $(NAME) $(LIST_OBJ_LIBFT)
 	ranlib $(NAME)
 
 clean:
-		/bin/rm -f $(OBJFILES)
+	rm -rf $(LIST_OBJ_LIBFT)
 
 fclean: clean
-		/bin/rm -f $(NAME)
+	rm -rf $(NAME)
 
 re: fclean all
+
+.PHONY: clean fclean re clear all libft.a
